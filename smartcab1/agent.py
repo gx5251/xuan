@@ -79,10 +79,7 @@ class LearningAgent(Agent):
         ###########
         # Calculate the maximum Q-value of all actions for a given state
 
-        maxQ = 0.0
-        if state in self.Q: maxQ = max(self.Q[state].values())
-
-        return maxQ 
+        return max(self.Q[state].values())
 
 
     def createQ(self, state):
@@ -116,16 +113,15 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
+        possible = []
         if self.learning:
-            rando = random.randint(0, 199)
-
-            if rando < ( self.epsilon * 100 ) :
+            if self.epsilon > random.random():
                 action = choice(self.valid_actions)
             else:
-                maxQ = self.get_maxQ(state)
-                Qs= self.Q[state]
-                possible_A = [action for action, value in Qs.items() if value == maxQ]
-                action = choice(possible_A)
+                for i in self.Q[state].keys():
+                    if self.Q[state][i] == self.get_maxQ(state):
+                        possible.append(i)
+                action = choice(possible)
         else:
             action = choice(self.valid_actions)
             
