@@ -47,6 +47,7 @@ class LearningAgent(Agent):
             self.alpha = 0
 
         else:
+            #self.epsilon = self.epsilon - 0.05
             self.epsilon = math.cos(0.00157*self.t)
             self.alpha = 0.5
 
@@ -92,10 +93,12 @@ class LearningAgent(Agent):
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
 
-        if self.learning and state not in self.Q:
-            self.Q[state] = {}
-            for action in self.valid_actions:
-                self.Q[state][action] = 0.0
+        #if self.learning and state not in self.Q:
+            #self.Q[state] = {}
+            #for action in self.valid_actions:
+                #self.Q[state][action] = 0.0
+        if self.learning:
+            self.Q.setdefault(state, {action: 0.0 for action in self.valid_actions})
 
 
     def choose_action(self, state):
@@ -197,7 +200,7 @@ def run():
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=50,tolerance = 0.02)
+    sim.run(n_test=50,tolerance = 0.05)
 
 
 if __name__ == '__main__':
